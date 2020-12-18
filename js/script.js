@@ -70,11 +70,29 @@ document.querySelector('.activities').addEventListener('change', e => {
     console.log(clickedCost);
 
     if (clicked) {
-        total = clickedCost;
-    } else  {
-        total -= clickedCost;
+        total = clicked + clickedCost;
+    } else {
+        total = clicked - clickedCost;
     }
 
+    totalCost.innerHTML = `Total: $${total}`;
+
+    // for(let i = 0; i < checkboxes.length; i++) {
+    //     const checkboxType = checkboxes[i].getAttribute('data-cost');
+
+    //     console.log(checkboxType);
+
+    //     if (clicked) {
+    //         total += checkboxType;
+
+    //     } else if (total > 0) {
+    //         total -= checkboxType;
+    //     }
+
+    //     totalCost.innerHTML = `Total: $${total}`;
+    // }
+
+});
 
 const nameValidator = () => {
     
@@ -99,8 +117,5 @@ form.addEventListener('submit', (e) => {
 
     nameValidator();
 });
-
-
-
 
 shirtDesign();
