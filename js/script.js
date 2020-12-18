@@ -28,19 +28,18 @@ const shirtDesign = () => {
 
     color.disabled = true;
 
-    design.addEventListener('change', () => {
+    design.addEventListener('change', (e) => {
 
         color.disabled = false;
 
         for (let i = 0; i < choice.length; i++){
-            const option = choice[i].getAttribute('data-theme');
+            const option = choice[i];
+            const optionTheme = choice[i].getAttribute('data-theme');
             const design_choice = design.value;
 
-            console.log(option);
-            // console.log(design_choice);
-
-            if (option === design_choice) {
+            if (optionTheme === design_choice) {
                 option.selected = true;
+                option.hidden = true;
             }
         }
         
