@@ -1,5 +1,12 @@
 const otherJob = document.getElementById('other-job-role');
 const jobTitle = document.getElementById('title');
+const form = document.querySelector('#register');
+const name = document.querySelector('#name');
+const email = document.querySelector('#email');
+const activityRegister = document.querySelector('#activities');
+const checkboxes = document.querySelectorAll('.activities input');
+let totalCost = document.getElementById('activities-cost');
+let total = 0;
 
 window.onload = () => {
     document.getElementById('name').focus();
@@ -28,7 +35,7 @@ const shirtDesign = () => {
 
     color.disabled = true;
 
-    design.addEventListener('change', (e) => {
+    design.addEventListener('change', () => {
 
         color.disabled = false;
 
@@ -37,13 +44,63 @@ const shirtDesign = () => {
             const optionTheme = choice[i].getAttribute('data-theme');
             const design_choice = design.value;
 
+            console.log(optionTheme);
+
             if (optionTheme === design_choice) {
-                option.selected = true;
+                console.log(option)
+                option.hidden = false;
+            } else {
                 option.hidden = true;
             }
         }
         
     });
 }
+
+// Event listener for checboxes
+document.querySelector('.activities').addEventListener('change', e => {
+    
+    // Store checkebox input that was clicked
+    const clicked = e.target;
+
+    // Store the data-cost attribute of the input that was clicked
+    const clickedCost = clicked.getAttribute('data-cost');
+
+    console.log(clicked);
+    console.log(clickedCost);
+
+    if (clicked) {
+        total = clickedCost;
+    } else  {
+        total -= clickedCost;
+    }
+
+
+const nameValidator = () => {
+    
+    // Get the value of the name field
+    const nameValue = name.value;
+
+    if (nameValue == "" || nameValue == null) {
+        document.getElementById('name-id');
+    }
+
+    const nameIsValid = /^[a-zA-z]+ ?[a-zA-z]*? ?[a-zA-z]*?$/.test(nameValue);
+
+    console.log(nameValue);
+
+    // Check that the name is valid
+    
+    return nameIsValid;
+}
+
+form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    nameValidator();
+});
+
+
+
 
 shirtDesign();
