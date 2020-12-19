@@ -137,12 +137,6 @@ const emailValidator = () => {
 
     const emailIsValid = /^\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i.test(emailValue);
 
-    if (emailIsValid) {
-        email.parentElement.lastElementChild.innerHTML = `Email must be correct format i.e. jsmith@example.com`;
-
-        return false;
-    }
-
     return emailIsValid;
 }
 
