@@ -15,5 +15,5 @@
 <p>The scope of this project was to create an inclusive, interactive registration form using JavaScript.</p>
 
 
-
+<h3>Comments</h3>
  
