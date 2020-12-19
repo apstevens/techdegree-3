@@ -4,10 +4,13 @@ const form = document.querySelector('#register');
 const name = document.querySelector('#name');
 const email = document.querySelector('#email');
 const activityRegister = document.querySelector('#activities');
+const activityHint = document.getElementById('activities-hint');
+const activityBox = document.getElementById('activities-box');
 const checkboxes = document.querySelectorAll('.activities input');
 const paymentSelect = document.getElementById('payment');
 const creditCardOption = document.getElementById('credit-card');
 const creditCardNumber = document.getElementById('cc-num');
+const cvvNumber = document.getElementById('cvv');
 const paypalOption = document.getElementById('paypal');
 const bitcoinOption = document.getElementById('bitcoin');
 let totalCost = document.getElementById('activities-cost');
@@ -132,14 +135,22 @@ const nameValidator = () => {
 const emailValidator = () => {
     const emailValue = email.value;
 
-    const emailIsValid = /^[^@]+@[^@.]+\.[a-z]+$/i.test(emailValue);
+    const emailIsValid = /^\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i.test(emailValue);
+
+    if (emailIsValid) {
+        email.parentElement.lastElementChild.innerHTML = `Email must be correct format i.e. jsmith@example.com`;
+
+        return false;
+    }
 
     return emailIsValid;
 }
 
 const activityValidator = () => {
     const activityIsValid = total > 0;
-    !activityIsValid && console.log('Please select at least one activity.');
+
+    !activityIsValid && console.log('Please select at least one activity');
+    
     return activityIsValid;
 }
 
@@ -147,6 +158,13 @@ const cardValidator = () => {
     const ccValue = creditCardNumber.value;
     const numberIsValid = /^(?:4[0-9]{12}(?:[0-9]{3})?|[25][1-7][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$/.test(ccValue);
     return numberIsValid;
+}
+
+const cvvValidator = () => {
+    const cvvValue = cvvNumber.value;
+    const cvvIsValid = /^\d{3}$/.test(cvvValue);
+
+    return cvvIsValid;
 }
 
 form.addEventListener('submit', (e) => {
@@ -167,9 +185,9 @@ form.addEventListener('submit', (e) => {
 
     if (!activityValidator()) {
         e.preventDefault();
-        errors(activityRegister);
+        errors(activityBox);
     } else {
-        errors(activityRegister, false);
+        errors(activityBox, false);
     }
 
     if (!cardValidator()) {
@@ -177,6 +195,13 @@ form.addEventListener('submit', (e) => {
         errors(creditCardNumber);
     } else {
         errors(creditCardNumber, false);
+    }
+
+    if (!cvvValidator()) {
+        e.preventDefault();
+        errors(cvvNumber);
+    } else {
+        errors(cvvNumber, false);
     }
 
 });
