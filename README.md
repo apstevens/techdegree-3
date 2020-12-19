@@ -1,6 +1,6 @@
 Techdegree Project 3
 
-Interactive form project
+<h1>Interactive form project</h1>
 
 Languages
 
