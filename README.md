@@ -2,9 +2,14 @@ Techdegree Project 3
 
 <h1>Interactive form project</h1>
 
-Languages
+<h3>Languages</h3>
 
-JavaScript
-CSS
-HTML
+<ul>
+    <li>HTML</li>
+    <li>CSS</li>
+    <li>JavaScript</li>
+</ul>
+
+
+
  
