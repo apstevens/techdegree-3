@@ -10,6 +10,10 @@
     <li>JavaScript</li>
 </ul>
 
+<h3>Introduction</h3>
+
+<p>The scope of this project was to create an inclusive, interactive registration form using JavaScript.</p>
+
 
 
  
