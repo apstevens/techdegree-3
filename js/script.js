@@ -5,11 +5,18 @@ const name = document.querySelector('#name');
 const email = document.querySelector('#email');
 const activityRegister = document.querySelector('#activities');
 const checkboxes = document.querySelectorAll('.activities input');
+const paymentSelect = document.getElementById('payment');
+const creditCardOption = document.getElementById('credit-card');
+const creditCardNumber = document.getElementById('cc-num');
+const paypalOption = document.getElementById('paypal');
+const bitcoinOption = document.getElementById('bitcoin');
 let totalCost = document.getElementById('activities-cost');
 let total = 0;
 
+// Onload brings elements into focus and selects credit card by default.
 window.onload = () => {
     document.getElementById('name').focus();
+    paymentSelect[1].selected = true;
 }
 
 
@@ -63,59 +70,115 @@ document.querySelector('.activities').addEventListener('change', e => {
     // Store checkebox input that was clicked
     const clicked = e.target;
 
-    // Store the data-cost attribute of the input that was clicked
-    const clickedCost = clicked.getAttribute('data-cost');
-
-    console.log(clicked);
-    console.log(clickedCost);
-
-    if (clicked) {
-        total = clicked + clickedCost;
-    } else {
-        total = clicked - clickedCost;
+    if (clicked.checked) {
+        total += + clicked.dataset.cost;
+    } else if (total > 0) {
+        total -= + clicked.dataset.cost;
     }
 
     totalCost.innerHTML = `Total: $${total}`;
 
-    // for(let i = 0; i < checkboxes.length; i++) {
-    //     const checkboxType = checkboxes[i].getAttribute('data-cost');
-
-    //     console.log(checkboxType);
-
-    //     if (clicked) {
-    //         total += checkboxType;
-
-    //     } else if (total > 0) {
-    //         total -= checkboxType;
-    //     }
-
-    //     totalCost.innerHTML = `Total: $${total}`;
-    // }
-
 });
+
+// Update payment selection 
+const paymentChoice = e => {
+    const paymentDiv = e;
+    switch (paymentDiv){
+        case 'credit-card':
+            paypalOption.style.display = 'none';
+            bitcoinOption.style.display = 'none';
+            creditCardOption.style.display = 'block';
+            break;
+        case 'paypal':
+            paypalOption.style.display = 'block';
+            bitcoinOption.style.display = 'none';
+            creditCardOption.style.display = 'none';
+            break;
+        case 'bitcoin':
+            paypalOption.style.display = 'none';
+            bitcoinOption.style.display = 'block';
+            creditCardOption.style.display = 'none';
+            break;
+    }
+}
+
+// Select payment option from user choice
+paymentSelect.addEventListener('change', e => {
+    paymentChoice(e.target.value);
+});
+
+const errors = (elem, bool = true) => {
+    if (bool) {
+        elem.parentElement.classList.add('not-valid');
+        elem.parentElement.classList.remove('valid');
+        elem.parentElement.lastElementChild.style.display = 'block';
+    } else {
+        elem.parentElement.classList.add('valid');
+        elem.parentElement.classList.remove('not-valid');
+        elem.parentElement.lastElementChild.style.display = 'none';
+    }
+}
 
 const nameValidator = () => {
     
     // Get the value of the name field
     const nameValue = name.value;
 
-    if (nameValue == "" || nameValue == null) {
-        document.getElementById('name-id');
-    }
-
     const nameIsValid = /^[a-zA-z]+ ?[a-zA-z]*? ?[a-zA-z]*?$/.test(nameValue);
 
-    console.log(nameValue);
-
-    // Check that the name is valid
-    
     return nameIsValid;
 }
 
-form.addEventListener('submit', (e) => {
-    e.preventDefault();
+const emailValidator = () => {
+    const emailValue = email.value;
 
-    nameValidator();
+    const emailIsValid = /^[^@]+@[^@.]+\.[a-z]+$/i.test(emailValue);
+
+    return emailIsValid;
+}
+
+const activityValidator = () => {
+    const activityIsValid = total > 0;
+    !activityIsValid && console.log('Please select at least one activity.');
+    return activityIsValid;
+}
+
+const cardValidator = () => {
+    const ccValue = creditCardNumber.value;
+    const numberIsValid = /^(?:4[0-9]{12}(?:[0-9]{3})?|[25][1-7][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$/.test(ccValue);
+    return numberIsValid;
+}
+
+form.addEventListener('submit', (e) => {
+
+    if (!nameValidator()) {
+        e.preventDefault();
+        errors(name);
+    } else {
+        errors(name, false);
+    }
+
+    if (!emailValidator()) {
+        e.preventDefault();
+        errors(email);
+    } else {
+        errors(email, false);
+    }
+
+    if (!activityValidator()) {
+        e.preventDefault();
+        errors(activityRegister);
+    } else {
+        errors(activityRegister, false);
+    }
+
+    if (!cardValidator()) {
+        e.preventDefault();
+        errors(creditCardNumber);
+    } else {
+        errors(creditCardNumber, false);
+    }
+
 });
 
 shirtDesign();
