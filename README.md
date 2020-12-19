@@ -1,6 +1,6 @@
-Techdegree Project 3
+<h1>Techdegree Project 3</h1>
 
-<h1>Interactive form project</h1>
+<h2>Interactive form project</h2>
 
 <h3>Languages</h3>
 
