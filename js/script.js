@@ -11,6 +11,7 @@ const paymentSelect = document.getElementById('payment');
 const creditCardOption = document.getElementById('credit-card');
 const creditCardNumber = document.getElementById('cc-num');
 const cvvNumber = document.getElementById('cvv');
+const creditCardBox = document.querySelector('.credit-card-box');
 const paypalOption = document.getElementById('paypal');
 const bitcoinOption = document.getElementById('bitcoin');
 let totalCost = document.getElementById('activities-cost');
@@ -20,6 +21,9 @@ let total = 0;
 window.onload = () => {
     document.getElementById('name').focus();
     paymentSelect[1].selected = true;
+    creditCardOption.style.display = 'block';
+    paypalOption.style.display = 'none';
+    bitcoinOption.style.display = 'none';
 }
 
 
@@ -135,7 +139,16 @@ const nameValidator = () => {
 const emailValidator = () => {
     const emailValue = email.value;
 
-    const emailIsValid = /^\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i.test(emailValue);
+    let emailIsValid = /^$/;
+
+    if (emailIsValid) {
+        email.parentElement.lastElementChild.innerHTML = `Please enter an email address`;
+        return false;
+    } else {
+        email.parentElement.lastElementChild.innerHTML = `Email address must be correctly formatted e.g. jsmith@example.com`;
+    }
+
+    emailIsValid = /^(?:[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,6})?$/.test(emailValue);
 
     return emailIsValid;
 }
@@ -150,16 +163,56 @@ const activityValidator = () => {
 
 const cardValidator = () => {
     const ccValue = creditCardNumber.value;
-    const numberIsValid = /^(?:4[0-9]{12}(?:[0-9]{3})?|[25][1-7][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$/.test(ccValue);
+
+    let numberIsValid = /^$/.test(ccValue);
+
+    if (numberIsValid) {
+        creditCardNumber.parentElement.lastElementChild.innerHTML = `Please enter a card number`;
+        return false;
+    } else {
+        creditCardNumber.parentElement.lastElementChild.innerHTML = `Please enter a valid credit card number between 13 - 16 digits`;
+    }
+
+    numberIsValid = /\D+/.test(ccValue);
+
+    if (numberIsValid) {
+        creditCardNumber.parentElement.lastElementChild.innerHTML = `Card number must contain numbers only`;
+        return false;
+    } else {
+        creditCardNumber.parentElement.lastElementChild.innerHTML = `Please enter a valid credit card number between 13 - 16 digits`;
+    }
+
+    numberIsValid = /^4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9]{2})[0-9]{12}|(?:2131|1800|35\d{3})\d{11}$/.test(ccValue);
+
     return numberIsValid;
 }
 
 const cvvValidator = () => {
     const cvvValue = cvvNumber.value;
-    const cvvIsValid = /^\d{3}$/.test(cvvValue);
+
+    let cvvIsValid = /^$/.test(cvvValue);
+
+    if (cvvIsValid) {
+        cvvNumber.parentElement.lastElementChild.innerHTML = `Please enter a valid CVV`;
+        return false;
+    } else {
+        cvvNumber.parentElement.lastElementChild.innerHTML = `CVV must be 3 digits`;
+    }
+
+    cvvIsValid = /\D+/.test(emailValue);
+
+    if (cvvIsValid) {
+        cvvNumber.parentElement.lastElementChild.innerHTML = `CVV can only contain numbers`;
+        return false;
+    } else {
+        cvvNumber.parentElement.lastElementChild.innerHTML = `CVV must be 3 digits`;
+    }
+
+     cvvIsValid = /^\d{3}$/.test(cvvValue);
 
     return cvvIsValid;
 }
+
 
 form.addEventListener('submit', (e) => {
 
@@ -198,6 +251,45 @@ form.addEventListener('submit', (e) => {
         errors(cvvNumber, false);
     }
 
+});
+
+// Foreach adding event listeners to checkboxes
+checkboxes.forEach(checkbox => {
+    // Focus class added to checkbox parent label
+    checkbox.addEventListener('focus', e => {
+        checkbox.parentElement.classList.add('focus');
+    });
+
+    // Focus class removed from parent label on blur event
+    checkbox.addEventListener('blur', e => {
+        checkbox.parentElement.classList.remove('focus');
+    });
+
+    // Listen for checkbox events
+    checkbox.addEventListener('change', e => {
+        // Prevents user from selecting activities with same date and time
+        if (e.target.className !== 'disabled') {
+            if (checkbox.checked) {
+                checkboxes.forEach(cb => {
+                    if (cb.name !== checkbox.name && cb.dataset.dayAndTime === checkbox.dataset
+                        .dayAndTime) {
+                        cb.parentElement.classList.add('disabled');
+                        cb.classList.add('disabled');
+                    }
+                });
+            } else {
+                checkboxes.forEach(cb => {
+                    if (cb.name !== checkbox.name && cb.dataset.dayAndTime === checkbox.dataset
+                        .dayAndTime) {
+                        cb.parentElement.classList.remove('disabled');
+                        cb.classList.remove('disabled');
+                    }
+                });
+            }
+        } else {
+            e.target.checked = false;
+        }
+    });
 });
 
 shirtDesign();
