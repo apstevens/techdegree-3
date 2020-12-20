@@ -116,6 +116,7 @@ paymentSelect.addEventListener('change', e => {
 
 const errors = (elem, bool = true) => {
     if (bool) {
+        console.log(elem.parentElement);
         elem.parentElement.classList.add('not-valid');
         elem.parentElement.classList.remove('valid');
         elem.parentElement.lastElementChild.style.display = 'block';
@@ -131,7 +132,16 @@ const nameValidator = () => {
     // Get the value of the name field
     const nameValue = name.value;
 
-    const nameIsValid = /^[a-zA-z]+ ?[a-zA-z]*? ?[a-zA-z]*?$/.test(nameValue);
+    let nameIsValid = /^$/.test(nameValue);
+
+    if (nameIsValid) {
+        name.parentElement.lastElementChild.innerHTML = `Please enter your full name`;
+        return false
+    } else {
+        name.parentElement.lastElementChild.innerHTML = `Name can only contain letters`;
+    }
+
+    nameIsValid = /^[a-zA-z]+ ?[a-zA-z]*? ?[a-zA-z]*?$/.test(nameValue);
 
     return nameIsValid;
 }
@@ -156,7 +166,12 @@ const emailValidator = () => {
 const activityValidator = () => {
     const activityIsValid = total > 0;
 
-    !activityIsValid && console.log('Please select at least one activity');
+    // !activityIsValid && console.log('Please select at least one activity');
+
+    if (activityIsValid) {
+        activityHint.parentElement.lastElementChild.innerHTML = `Please select at least one activity`;
+        return false;
+    }
     
     return activityIsValid;
 }
