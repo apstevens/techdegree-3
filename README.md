@@ -21,7 +21,7 @@
 
 <p>The goal of any form is to ensure the data supplied by the user is necessary and properly formatted to complete operations successfully.</p>
 <p>Using JavaScript the user's input will be validated as they type, providing a responsive user experience.</P>
-<p>Required information should be validated as a necessity since without this information the form cannot be completed, therefore on this basis I opted to provide rela-time validation for all required fields.</p>
+<p>Required information should be validated as a necessity since without this information the form cannot be completed, therefore on this basis I opted to provide real-time validation for all required fields.</p>
 
 <h4>Conditional error messages</h4>
 
