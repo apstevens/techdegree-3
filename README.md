@@ -20,5 +20,6 @@
 <h4>Conditional Error Messages</h4>
 
 <p>To ensure my form is user friendly and inclusive for all regardless of ability I have added conditional messages to all user input fields.</p>
+<p>The aim here is to provide unique descriptive and informative messages to the user about their input and what needs to be corrected.</p>
 
  
