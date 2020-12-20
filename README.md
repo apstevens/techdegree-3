@@ -16,4 +16,9 @@
 
 
 <h3>Comments</h3>
+
+<h4>Conditional Error Messages</h4>
+
+<p>To ensure my form is user friendly and inclusive for all regardless of ability I have added conditional messages to all user input fields.</p>
+
  
