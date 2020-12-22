@@ -4,6 +4,7 @@ const jobTitle = document.getElementById('title');
 const form = document.querySelector('#register');
 const nameInput = document.getElementById('name');
 const email = document.querySelector('#email');
+const colorSelect = document.getElementById('color');
 const activityRegister = document.querySelector('#activities');
 const activityHint = document.getElementById('activities-hint');
 const activityBox = document.getElementById('activities-box');
@@ -54,8 +55,6 @@ const shirtDesign = () => {
             const optionTheme = choice[i].getAttribute('data-theme');
             const design_choice = design.value;
 
-            console.log(optionTheme);
-
             if (optionTheme === design_choice) {
                 console.log(option)
                 shirtColors.style.display = 'block';
@@ -64,6 +63,10 @@ const shirtDesign = () => {
                 option.hidden = true;
             }
         }
+
+        colorSelect[0].innerHTML = `Please select a colour`;
+        colorSelect[0].style.display = 'block';
+        colorSelect[0].selected = true;
         
     });
 }
@@ -314,9 +317,9 @@ email.addEventListener( 'keyup', e => {
     }
 });
 
-activityBox.addEventListener( 'focus', e => {
+activityBox.addEventListener( 'change', e => {
     
-    if (!activityValidator() && e.target === activityBox) {
+    if (activityValidator() && e.target.type === "checkbox") {
         errors(activityBox, true);
     } else if (e.target === activityBox) {
         errors(activityBox, false);
@@ -346,8 +349,6 @@ cvvNumber.addEventListener('keyup', e => {
         errors(cvvNumber, false);
     }
 });
-
-
 
 // Foreach adding event listeners to checkboxes
 checkboxes.forEach(checkbox => {
