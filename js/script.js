@@ -1,7 +1,8 @@
 const otherJob = document.getElementById('other-job-role');
+const shirtColors = document.querySelector('.shirt-colors');
 const jobTitle = document.getElementById('title');
 const form = document.querySelector('#register');
-const name = document.querySelector('#name');
+const nameInput = document.getElementById('name');
 const email = document.querySelector('#email');
 const activityRegister = document.querySelector('#activities');
 const activityHint = document.getElementById('activities-hint');
@@ -11,6 +12,8 @@ const paymentSelect = document.getElementById('payment');
 const creditCardOption = document.getElementById('credit-card');
 const creditCardNumber = document.getElementById('cc-num');
 const cvvNumber = document.getElementById('cvv');
+const zipInput = document.getElementById('zip');
+const zipBox = document.getElementById('zip-box');
 const creditCardBox = document.querySelector('.credit-card-box');
 const paypalOption = document.getElementById('paypal');
 const bitcoinOption = document.getElementById('bitcoin');
@@ -40,18 +43,11 @@ jobTitle.addEventListener('change', () => {
 
 const shirtDesign = () => {
     const design = document.querySelector('#design');
-    const color = document.querySelector('#color');
     const choice = document.querySelectorAll('#color option');
 
-    // console.log(design);
-    // console.log(color);
-    // console.log(choice)
-
-    color.disabled = true;
+    shirtColors.style.display = 'none';
 
     design.addEventListener('change', () => {
-
-        color.disabled = false;
 
         for (let i = 0; i < choice.length; i++){
             const option = choice[i];
@@ -62,6 +58,7 @@ const shirtDesign = () => {
 
             if (optionTheme === design_choice) {
                 console.log(option)
+                shirtColors.style.display = 'block';
                 option.hidden = false;
             } else {
                 option.hidden = true;
@@ -114,30 +111,19 @@ paymentSelect.addEventListener('change', e => {
     paymentChoice(e.target.value);
 });
 
-const errors = (elem, bool = true) => {
-
-    if (bool) {
-        elem.parentElement.classList.add('not-valid');
-        elem.parentElement.classList.remove('valid');
-        elem.parentElement.lastElementChild.style.display = 'block';
-    } else {
-        elem.parentElement.classList.add('valid');
-        elem.parentElement.classList.remove('not-valid');
-        elem.parentElement.lastElementChild.style.display = 'none';
-    }
-}
-
 const nameValidator = () => {
 
-    const nameValue = name.value;
+    const nameValue = nameInput.value;
     
-    let nameIsValid = /^$/;
+    let nameIsValid = /^$/.test(nameValue);
+
+    console.log(nameIsValid);
 
     if (nameIsValid) {
-        name.parentElement.lastElementChild.innerHTML = `Name cannot be blank`;
+        nameInput.parentElement.lastElementChild.innerHTML = `Name cannot be blank`;
         return false;
     } else {
-        name.parentElement.lastElementChild.innerHTML = `Name cannot contain numbers`;
+        nameInput.parentElement.lastElementChild.innerHTML = `Name cannot contain numbers`;
     }
 
     nameIsValid = /^[a-zA-z]+ ?[a-zA-z]*? ?[a-zA-z]*?$/.test(nameValue);
@@ -148,14 +134,14 @@ const nameValidator = () => {
 const emailValidator = () => {
     const emailValue = email.value;
 
-    let emailIsValid = /^$/;
+    let emailIsValid = /^$/.test(emailValue);
+
+    console.log(emailIsValid);
 
     if (emailIsValid) {
         email.parentElement.lastElementChild.innerHTML = `Please enter an email address`;
         return false;
-    } 
-    
-    else {
+    } else {
         email.parentElement.lastElementChild.innerHTML = `Email address must be correctly formatted e.g. jsmith@example.com`;
     }
 
@@ -199,6 +185,32 @@ const cardValidator = () => {
     return numberIsValid;
 }
 
+const zipValidator = () => {
+    const zipValue = zipInput.value;
+
+    let zipIsValid = /^$/.test(zipValue);
+
+    if ( zipIsValid ) {
+        zipInput.parentElement.lastElementChild.innerHTML = `Zip Code cannot be blank`;
+        return false;
+    } else {
+        zipInput.parentElement.lastElementChild.innerHTML = 'Zip Code should contain 5 digits';
+    }
+
+    zipIsValid = /\D+/.test(zipValue);
+
+    if ( zipIsValid ) {
+        zipInput.parentElement.lastElementChild.innerHTML = `Zip Code must contain numbers only`;
+        return false;
+    } else {
+        zipInput.parentElement.lastElementChild.innerHTML = 'Zip Code should contain 5 digits';
+    }
+
+    zipIsValid = /^\d{5}$/.test(zipValue);
+
+    return zipIsValid;
+}
+
 const cvvValidator = () => {
     const cvvValue = cvvNumber.value;
 
@@ -211,7 +223,7 @@ const cvvValidator = () => {
         cvvNumber.parentElement.lastElementChild.innerHTML = `CVV must be 3 digits`;
     }
 
-    cvvIsValid = /\D+/.test(emailValue);
+    cvvIsValid = /\D+/.test(cvvValue);
 
     if (cvvIsValid) {
         cvvNumber.parentElement.lastElementChild.innerHTML = `CVV can only contain numbers`;
@@ -225,14 +237,26 @@ const cvvValidator = () => {
     return cvvIsValid;
 }
 
+const errors = ( elem, bool = true ) => {
+
+    if ( bool ) {
+        elem.parentElement.classList.add('not-valid');
+        elem.parentElement.classList.remove('valid');
+        elem.parentElement.lastElementChild.style.display = 'block';
+    } else {
+        elem.parentElement.classList.add('valid');
+        elem.parentElement.classList.remove('not-valid');
+        elem.parentElement.lastElementChild.style.display = 'none';
+    }
+}
 
 form.addEventListener('submit', (e) => {
 
     if (!nameValidator()) {
         e.preventDefault();
-        errors(name, true);
+        errors(nameInput, true);
     } else {
-        errors(name, false);
+        errors(nameInput, false);
     }
 
     if (!emailValidator()) {
@@ -256,6 +280,13 @@ form.addEventListener('submit', (e) => {
         errors(creditCardNumber, false);
     }
 
+    if (!zipValidator()) {
+        e.preventDefault();
+        errors(zipInput, true);
+    } else {
+        errors(zipInput, false);
+    }
+
     if (!cvvValidator()) {
         e.preventDefault();
         errors(cvvNumber, true);
@@ -264,6 +295,59 @@ form.addEventListener('submit', (e) => {
     }
 
 });
+
+nameInput.addEventListener('keyup', e => {
+   
+    if (!nameValidator() && e.target === nameInput) {
+        errors(nameInput, true);
+    } else if ( e.target === nameInput) {
+        errors(nameInput, false);
+    }
+});
+
+email.addEventListener( 'keyup', e => {
+    
+    if (!emailValidator() && e.target === email) {
+        errors(email, true);
+    } else if (e.target === email) {
+        errors(email, false);
+    }
+});
+
+activityBox.addEventListener( 'focus', e => {
+    
+    if (!activityValidator() && e.target === activityBox) {
+        errors(activityBox, true);
+    } else if (e.target === activityBox) {
+        errors(activityBox, false);
+    }
+});
+
+creditCardNumber.addEventListener( 'keyup', e => {
+    if (!cardValidator() && e.target === creditCardNumber) {
+        errors(creditCardNumber, true);
+    } else if (e.target === creditCardNumber) {
+        errors(creditCardNumber, false);
+    }
+});
+
+zipInput.addEventListener('keyup', e => {
+    if (!zipValidator() && e.target === zipInput) {
+        errors(zipInput, true);
+    } else if (e.target === zipInput) {
+        errors(zipInput, false);
+    }
+});
+
+cvvNumber.addEventListener('keyup', e => {
+    if (!cvvValidator() && e.target === cvvNumber) {
+        errors(cvvNumber, true);
+    } else if (e.target === cvvNumber) {
+        errors(cvvNumber, false);
+    }
+});
+
+
 
 // Foreach adding event listeners to checkboxes
 checkboxes.forEach(checkbox => {
