@@ -64,7 +64,6 @@ const shirtDesign = () => {
             }
         }
 
-        colorSelect[0].innerHTML = `Please select a colour`;
         colorSelect[0].style.display = 'block';
         colorSelect[0].selected = true;
         
