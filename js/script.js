@@ -84,6 +84,49 @@ document.querySelector('.activities').addEventListener('change', e => {
 
     totalCost.innerHTML = `Total: $${total}`;
 
+    console.log(totalCost);
+
+});
+
+// Foreach adding event listeners to checkboxes
+checkboxes.forEach(checkbox => {
+    // Focus class added to checkbox parent label
+    checkbox.addEventListener('focus', e => {
+        checkbox.parentElement.classList.add('focus');
+    });
+
+    // Focus class removed from parent label on blur event
+    checkbox.addEventListener('blur', e => {
+        checkbox.parentElement.classList.remove('focus');
+    });
+
+    // Listen for checkbox events
+    checkbox.addEventListener('change', e => {
+        // Prevents user from selecting activities with same date and time
+        if (e.target.className !== 'disabled') {
+            if (checkbox.checked) {
+                checkboxes.forEach(cb => {
+                    if (cb.name !== checkbox.name && cb.dataset.dayAndTime === checkbox.dataset
+                        .dayAndTime) {
+                        cb.parentElement.classList.add('disabled');
+                        cb.classList.add('disabled');
+                        cb.disabled = true;
+                    }
+                });
+            } else {
+                checkboxes.forEach(cb => {
+                    if (cb.name !== checkbox.name && cb.dataset.dayAndTime === checkbox.dataset
+                        .dayAndTime) {
+                        cb.parentElement.classList.remove('disabled');
+                        cb.classList.remove('disabled');
+                        cb.disabled = false;
+                    }
+                });
+            }
+        } else {
+            e.target.checked = false;
+        }
+    });
 });
 
 // Update payment selection 
@@ -318,10 +361,10 @@ email.addEventListener( 'keyup', e => {
 
 activityBox.addEventListener( 'change', e => {
     
-    if (activityValidator() && e.target.type === "checkbox") {
-        errors(activityBox, true);
-    } else if (e.target === activityBox) {
-        errors(activityBox, false);
+    if ( activityValidator() ) {
+        errors( activityBox, true );
+    } else {
+        errors( activityBox, false );
     }
 });
 
@@ -347,45 +390,6 @@ cvvNumber.addEventListener('keyup', e => {
     } else if (e.target === cvvNumber) {
         errors(cvvNumber, false);
     }
-});
-
-// Foreach adding event listeners to checkboxes
-checkboxes.forEach(checkbox => {
-    // Focus class added to checkbox parent label
-    checkbox.addEventListener('focus', e => {
-        checkbox.parentElement.classList.add('focus');
-    });
-
-    // Focus class removed from parent label on blur event
-    checkbox.addEventListener('blur', e => {
-        checkbox.parentElement.classList.remove('focus');
-    });
-
-    // Listen for checkbox events
-    checkbox.addEventListener('change', e => {
-        // Prevents user from selecting activities with same date and time
-        if (e.target.className !== 'disabled') {
-            if (checkbox.checked) {
-                checkboxes.forEach(cb => {
-                    if (cb.name !== checkbox.name && cb.dataset.dayAndTime === checkbox.dataset
-                        .dayAndTime) {
-                        cb.parentElement.classList.add('disabled');
-                        cb.classList.add('disabled');
-                    }
-                });
-            } else {
-                checkboxes.forEach(cb => {
-                    if (cb.name !== checkbox.name && cb.dataset.dayAndTime === checkbox.dataset
-                        .dayAndTime) {
-                        cb.parentElement.classList.remove('disabled');
-                        cb.classList.remove('disabled');
-                    }
-                });
-            }
-        } else {
-            e.target.checked = false;
-        }
-    });
 });
 
 shirtDesign();
