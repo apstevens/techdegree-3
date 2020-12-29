@@ -336,14 +336,14 @@ form.addEventListener('submit', (e) => {
         errors(email, false);
     }
 
-    if (!activityValidator()) {
+    if (activityValidator()) {
         e.preventDefault();
         errors(activityBox, true);
     } else {
         errors(activityBox, false);
     }
 
-    if ( paymentChoice[1].selected ) {
+    if ( paymentSelect[1].selected ) {
 
         if (!cardValidator) {
             e.preventDefault();
@@ -386,7 +386,7 @@ email.addEventListener( 'keyup', e => {
     }
 });
 
-activityRegister .addEventListener( 'change', e => {
+activityRegister.addEventListener( 'change', e => {
     
     if ( activityValidator() ) {
         errors( activityBox, true );
