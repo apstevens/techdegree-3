@@ -203,7 +203,7 @@ const emailValidator = () => {
 }
 
 const activityValidator = () => {
-    const activityIsValid = total > 0;
+    const activityIsValid = total <= 0;
 
     activityBox.parentElement.lastElementChild.innerHTML = `Please select at least one activity`;
     
@@ -386,7 +386,7 @@ email.addEventListener( 'keyup', e => {
     }
 });
 
-activityBox.addEventListener( 'change', e => {
+activityRegister .addEventListener( 'change', e => {
     
     if ( activityValidator() ) {
         errors( activityBox, true );
