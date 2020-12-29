@@ -156,13 +156,16 @@ paymentSelect.addEventListener('change', e => {
     paymentChoice(e.target.value);
 });
 
+/**
+ * Validates user inputs
+ * @return {bool} returns a boolean value true || false
+ */
+
 const nameValidator = () => {
 
     const nameValue = nameInput.value;
     
     let nameIsValid = /^$/.test(nameValue);
-
-    console.log(nameIsValid);
 
     if (nameIsValid) {
         nameInput.parentElement.lastElementChild.innerHTML = `Name cannot be blank`;
@@ -173,6 +176,8 @@ const nameValidator = () => {
 
     nameIsValid = /^[a-zA-z]+ ?[a-zA-z]*? ?[a-zA-z]*?$/.test(nameValue);
 
+    console.log(nameIsValid);
+
     return nameIsValid;
 }
 
@@ -180,8 +185,6 @@ const emailValidator = () => {
     const emailValue = email.value;
 
     let emailIsValid = /^$/.test(emailValue);
-
-    console.log(emailIsValid);
 
     if (emailIsValid) {
         email.parentElement.lastElementChild.innerHTML = `Please enter an email address`;
@@ -191,6 +194,8 @@ const emailValidator = () => {
     }
 
     emailIsValid = /^(?:[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,6})?$/.test(emailValue);
+
+    console.log(emailIsValid);
 
     return emailIsValid;
 }
@@ -209,7 +214,7 @@ const cardValidator = () => {
 
     let numberIsValid = /^$/.test(ccValue);
 
-    if (numberIsValid) {
+    if (numberIsValid && paymentChoice === 'credit-card') {
         creditCardNumber.parentElement.lastElementChild.innerHTML = `Please enter a card number`;
         return false;
     } else {
@@ -218,14 +223,14 @@ const cardValidator = () => {
 
     numberIsValid = /\D+/.test(ccValue);
 
-    if (numberIsValid) {
+    if (numberIsValid && paymentChoice === 'credit-card') {
         creditCardNumber.parentElement.lastElementChild.innerHTML = `Card number must contain numbers only`;
         return false;
     } else {
         creditCardNumber.parentElement.lastElementChild.innerHTML = `Please enter a valid credit card number between 13 - 16 digits`;
     }
 
-    numberIsValid = /^4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9]{2})[0-9]{12}|(?:2131|1800|35\d{3})\d{11}$/.test(ccValue);
+    numberIsValid = /^\d{13-16}?$/.test(ccValue);
 
     return numberIsValid;
 }
@@ -282,6 +287,14 @@ const cvvValidator = () => {
     return cvvIsValid;
 }
 
+/**
+ * Checks user input for valid entries
+ * @param {*} elem child element value
+ * @param {*} bool 
+ * 
+ * 
+ */
+
 const errors = ( elem, bool = true ) => {
 
     if ( bool ) {
@@ -318,7 +331,7 @@ form.addEventListener('submit', (e) => {
         errors(activityBox, false);
     }
 
-    if (!cardValidator()) {
+    if (!cardValidator() && paymentChoice === 'credit-card') {
         e.preventDefault();
         errors(creditCardNumber, true);
     } else {
@@ -369,7 +382,7 @@ activityBox.addEventListener( 'change', e => {
 });
 
 creditCardNumber.addEventListener( 'keyup', e => {
-    if (!cardValidator() && e.target === creditCardNumber) {
+    if (!cardValidator() && paymentChoice === 'credit-card' && e.target === creditCardNumber) {
         errors(creditCardNumber, true);
     } else if (e.target === creditCardNumber) {
         errors(creditCardNumber, false);
