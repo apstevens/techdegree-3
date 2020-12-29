@@ -12,6 +12,8 @@ const checkboxes = document.querySelectorAll('.activities input');
 const paymentSelect = document.getElementById('payment');
 const creditCardOption = document.getElementById('credit-card');
 const creditCardNumber = document.getElementById('cc-num');
+const expiryMonthSelect = document.getElementById('exp-month');
+const expiryYearSelect = document.getElementById('exp-year');
 const cvvNumber = document.getElementById('cvv');
 const zipInput = document.getElementById('zip');
 const zipBox = document.getElementById('zip-box');
@@ -63,8 +65,8 @@ const shirtDesign = () => {
                 option.hidden = true;
             }
         }
-
-        colorSelect[0].style.display = 'block';
+        colorSelect[0].innerHTML = 'Please select a color';
+        colorSelect[0].style.display = 'none';
         colorSelect[0].selected = true;
         
     });
@@ -214,23 +216,33 @@ const cardValidator = () => {
 
     let numberIsValid = /^$/.test(ccValue);
 
-    if (numberIsValid && paymentChoice === 'credit-card') {
+    if (numberIsValid) {
+
         creditCardNumber.parentElement.lastElementChild.innerHTML = `Please enter a card number`;
+
         return false;
+
     } else {
-        creditCardNumber.parentElement.lastElementChild.innerHTML = `Please enter a valid credit card number between 13 - 16 digits`;
+
+        creditCardNumber.parentElement.lastElementChild.innerHTML = `Credit card number must be between 13 - 16 digits`;
+
     }
 
     numberIsValid = /\D+/.test(ccValue);
 
-    if (numberIsValid && paymentChoice === 'credit-card') {
-        creditCardNumber.parentElement.lastElementChild.innerHTML = `Card number must contain numbers only`;
+    if ( numberIsValid ) {
+
+        creditCardNumber.parentElement.lastElementChild.innerHTML = `Card number can only contain numbers`;
+
         return false;
+
     } else {
-        creditCardNumber.parentElement.lastElementChild.innerHTML = `Please enter a valid credit card number between 13 - 16 digits`;
+
+        creditCardNumber.parentElement.lastElementChild.innerHTML = `Credit card number must be between 13 - 16 digits`;
+
     }
 
-    numberIsValid = /^\d{13-16}?$/.test(ccValue);
+    numberIsValid = /^\d{13,16}$/.test(ccValue);
 
     return numberIsValid;
 }
@@ -331,27 +343,29 @@ form.addEventListener('submit', (e) => {
         errors(activityBox, false);
     }
 
-    if (!cardValidator() && paymentChoice === 'credit-card') {
-        e.preventDefault();
-        errors(creditCardNumber, true);
-    } else {
-        errors(creditCardNumber, false);
-    }
+    if ( paymentChoice[1].selected ) {
 
-    if (!zipValidator()) {
-        e.preventDefault();
-        errors(zipInput, true);
-    } else {
-        errors(zipInput, false);
-    }
+        if (!cardValidator) {
+            e.preventDefault();
+            errors(creditCardNumber, true);
+        } else {
+            errors(creditCardNumber, false);
+        }
 
-    if (!cvvValidator()) {
-        e.preventDefault();
-        errors(cvvNumber, true);
-    } else {
-        errors(cvvNumber, false);
-    }
+        if (!zipValidator()) {
+            e.preventDefault();
+            errors(zipInput, true);
+        } else {
+            errors(zipInput, false);
+        }
 
+        if (!cvvValidator()) {
+            e.preventDefault();
+            errors(cvvNumber, true);
+        } else {
+            errors(cvvNumber, false);
+        }
+    }  
 });
 
 nameInput.addEventListener('keyup', e => {
@@ -382,7 +396,7 @@ activityBox.addEventListener( 'change', e => {
 });
 
 creditCardNumber.addEventListener( 'keyup', e => {
-    if (!cardValidator() && paymentChoice === 'credit-card' && e.target === creditCardNumber) {
+    if (!cardValidator() && e.target === creditCardNumber) {
         errors(creditCardNumber, true);
     } else if (e.target === creditCardNumber) {
         errors(creditCardNumber, false);
