@@ -214,9 +214,9 @@ const cardValidator = () => {
 
     const ccValue = creditCardNumber.value;
 
-    let numberIsValid = /^$/.test(ccValue);
+    let numberIsValid = /^$/.test( ccValue );
 
-    if (numberIsValid) {
+    if ( numberIsValid ) {
 
         creditCardNumber.parentElement.lastElementChild.innerHTML = `Please enter a card number`;
 
@@ -225,10 +225,9 @@ const cardValidator = () => {
     } else {
 
         creditCardNumber.parentElement.lastElementChild.innerHTML = `Credit card number must be between 13 - 16 digits`;
-
     }
 
-    numberIsValid = /\D+/.test(ccValue);
+    numberIsValid = /\D+/.test( ccValue );
 
     if ( numberIsValid ) {
 
@@ -239,10 +238,9 @@ const cardValidator = () => {
     } else {
 
         creditCardNumber.parentElement.lastElementChild.innerHTML = `Credit card number must be between 13 - 16 digits`;
-
     }
 
-    numberIsValid = /^\d{13,16}$/.test(ccValue);
+    numberIsValid = /^\d{13,16}$/.test( ccValue );
 
     return numberIsValid;
 }
@@ -345,7 +343,7 @@ form.addEventListener('submit', (e) => {
 
     if ( paymentSelect[1].selected ) {
 
-        if (!cardValidator) {
+        if (cardValidator) {
             e.preventDefault();
             errors(creditCardNumber, true);
         } else {
@@ -398,7 +396,7 @@ activityRegister.addEventListener( 'change', e => {
 creditCardNumber.addEventListener( 'keyup', e => {
     if (!cardValidator() && e.target === creditCardNumber) {
         errors(creditCardNumber, true);
-    } else if (e.target === creditCardNumber) {
+    } else {
         errors(creditCardNumber, false);
     }
 });
