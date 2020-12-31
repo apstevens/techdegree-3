@@ -343,11 +343,11 @@ form.addEventListener('submit', (e) => {
 
     if ( paymentSelect[1].selected ) {
 
-        if (cardValidator) {
+        if (cardValidator()) { 
+            errors(creditCardNumber, false);
+        } else {
             e.preventDefault();
             errors(creditCardNumber, true);
-        } else {
-            errors(creditCardNumber, false);
         }
 
         if (!zipValidator()) {
@@ -395,9 +395,9 @@ activityRegister.addEventListener( 'change', e => {
 
 creditCardNumber.addEventListener( 'keyup', e => {
     if (cardValidator() && e.target === creditCardNumber) {
-        errors(creditCardNumber, true);
-    } else {
         errors(creditCardNumber, false);
+    } else {
+        errors(creditCardNumber, true);
     }
 });
 
