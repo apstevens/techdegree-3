@@ -394,7 +394,7 @@ activityRegister.addEventListener( 'change', e => {
 });
 
 creditCardNumber.addEventListener( 'keyup', e => {
-    if (!cardValidator() && e.target === creditCardNumber) {
+    if (cardValidator() && e.target === creditCardNumber) {
         errors(creditCardNumber, true);
     } else {
         errors(creditCardNumber, false);
